@@ -519,13 +519,13 @@ def run():
             CanMove(board) 
         
         if len(options2) > 0:
+                     
+            UserMove()
 
-
-
-            board_state = Board_State(board)
-            best_move = get_best_move(board_state, 5)
-            board = (best_move.board)
-            CanMove(board)
+            #board_state = Board_State(board)
+            #best_move = get_best_move(board_state, 5)
+            #board = (best_move.board)
+            #CanMove(board)
 
         #print('ELIF!!!!!!!!!!!!!!!')
         #print('IF!!!!!!!!!!!!!!!')
