@@ -1,5 +1,5 @@
 #HyperParameters
-numrollout = 250    #Number of rollouts performed
+numrollout = 100    #Number of rollouts performed
 sqlUpdate_after_NGames = 1  #The sql speed database updates after these many games
 
 #Set up 
