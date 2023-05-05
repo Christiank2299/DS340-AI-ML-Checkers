@@ -475,7 +475,7 @@ def run():
             print('IF!!!!!!!!!!!!!!')
             
             board_state = Board_State(board)
-            best_move = get_best_moveABPruningBlue(board_state, 8)
+            best_move = get_best_moveABPruningBlue(board_state, 5)
             board = (best_move.board)
             CanMove(board)
 
