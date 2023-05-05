@@ -22,12 +22,12 @@ import random as rand
 import copy
 from Testing_MCTS import MCTS
 import SQLManipulator as sqlm
-from Minimax import get_best_move, get_best_moveABPruning
+from Minimax import get_best_move, get_best_moveABPruning, minimax, minimax_ab
 
 #Colors
 black = (0,0,0)
 grey = (120,120,120)
-white = (255,255,255)
+white = (0,100, 0)
 red = (255,0,0)
 lightred = (255,120,120)
 darkred = (128,0,0)
@@ -55,11 +55,39 @@ square = None #Used in UserMove
 #Class Board_state is an instance of the board that's hashable and can be ran through MCTS
 class Board_State():
     def __init__(self, board):
-        #These values are just initial values that don't matter in the functions
         self.board = board
         self.options1, self.options2 = CanMove(self.board)
         self.options = self.options1 + self.options2
         self.team = 1
+
+        self.blue_pieces = 0
+        self.red_pieces = 0
+        self.blue_kings = 0
+        self.red_kings = 0
+
+        for i in range(len(self.board)):
+            if self.board[i] == 1:
+                self.blue_pieces += 1
+            elif self.board[i] == -1:
+                self.red_pieces += 1
+            elif self.board[i] == 2:
+                self.blue_kings += 1
+            elif self.board[i] == -2:
+                self.red_kings += 1
+    
+    def count_blue_pieces(self):
+        return self.blue_pieces
+
+    def count_red_pieces(self):
+        return self.red_pieces
+
+    def count_blue_kings(self):
+        return self.blue_kings
+
+    def count_red_kings(self):
+        return self.red_kings
+
+
 
 #The find_children() method takes a board parameter and returns a set of possible board states resulting from legal moves 
 # that the current player can make.
@@ -138,7 +166,7 @@ class Board_State():
 
 # The is_terminal() method checks if the current board state is a terminal state, meaning either one of the players has no more legal moves. 
 # If the current state is a terminal state, the method returns True, otherwise it returns False.
-    def is_terminal(self,board):
+    def is_terminal(self, board):
         self.options1,self.options2 = CanMove(board)
         if len(options1) == 0 or len(options2) == 0:
             return True
@@ -158,8 +186,11 @@ class Board_State():
             #Someone is winning
             #print("Tie Instance")
             return .5
+    
 
 
+    def evaluate(self):
+        return (self.count_blue_pieces() - self.count_red_pieces())+ (self.count_blue_kings() * 0.5 - self.count_red_kings() * 0.5)
 
 class Game():
     #__init__(self, size) - Initializes the Game() object with a specified screen size and sets the running attribute to True.
@@ -488,20 +519,28 @@ def run():
             CanMove(board) 
         
         if len(options2) > 0:
-            print('ELIF!!!!!!!!!!!!!!!')
-            print('IF!!!!!!!!!!!!!!!')
+
+
+
             board_state = Board_State(board)
+            best_move = get_best_moveABPruning(board_state, 5)
+            board = (best_move.board)
+            CanMove(board)
+
+        #print('ELIF!!!!!!!!!!!!!!!')
+        #print('IF!!!!!!!!!!!!!!!')
+        #board_state = Board_State(board)
             # this is calling the minimax.get_best_move() function 
          
-            best_move = get_best_moveABPruning(board_state, 8)
+        #    best_move = get_best_moveABPruning(board_state, 10)
             
-            board = (best_move.board)
+        #    board = (best_move.board)
 
             # Assuming you have a Board_State instance called 'current_board'
             
 
             
-            CanMove(board)
+        #    CanMove(board)
    
             
 
