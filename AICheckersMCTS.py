@@ -1,6 +1,6 @@
 #HyperParameters
-numrollout = 10    #Number of rollouts performed
-sqlUpdate_after_NGames = 5  #The sql speed database updates after these many games
+numrollout = 250    #Number of rollouts performed
+sqlUpdate_after_NGames = 1  #The sql speed database updates after these many games
 
 #Set up 
 
@@ -484,12 +484,12 @@ def run():
 
             for i in range(numrollout):
                 tree.do_rolloutBlue(board_state)
-                if i % 5 == 0: # originally 10 not 5
+                if i % 50  == 0: # originally 10 not 5
                     print('# of Rollouts performed')
                     print(i)
-                    if i % 5 == 0 and i != 0: # originally 50 not 5
+                    if i % 50 == 0 and i != 0: # originally 50 not 5
                         simclock.tick()
-                        simtime = 5 / (simclock.get_time() / 1000)
+                        simtime = 50 / (simclock.get_time() / 1000) # originally 50 not 5 
                         print("Simulation speed: %2.2f" %(simtime), "g/s")
             print()
             choice, optionsNQ = tree.chooseBlue(board_state) 
