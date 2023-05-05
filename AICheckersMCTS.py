@@ -514,11 +514,8 @@ def run():
 
 
 
+            UserMove(game) 
             
-            board_state = Board_State(board)
-            best_move = get_best_moveABPruning(board_state, 5)
-            board = (best_move.board)
-            CanMove(board)
             
 
         #print('ELIF!!!!!!!!!!!!!!!')
