@@ -605,3 +605,4 @@ create_table()
 run()  #It's now called in the ActiveRunner.py script    
 
 #CanMove() has to be updated after each and every move (So each next move is legit and not blind)
+
