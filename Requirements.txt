@@ -1,0 +1,10 @@
+You need to have pygame installed. Follow these instructions to install it on your machine. 
+
+If youre on MACOS:
+open terminal and run 'pip3 install pygame' 
+
+If youre on Windows:
+open command prompt and run 'pip install pygame'
+
+
+
