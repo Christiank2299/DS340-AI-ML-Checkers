@@ -1,15 +1,4 @@
-'''
-@author Carter Koehn
-@since 10/15/2019
-Desc: 
-This program contains the logic to make a checkers game work without double jumps or forced jumps.
-It can use a computer generated random move, an inputted user move, or use MCTS (Which is what it does now)
-It keeps track of the simulating and total times and of the average reward per board_state
 
--Can simulate random games of checkers independantly from MCTS at about 120 games per second
--Using MCTS without adding to or reading from the SQL db simulates at about 15 games per second
--However the SQL table is ugly and can only update games into the db at about 5 games per second
-'''
 
 #HyperParameters
 numrollout = 10    #Number of rollouts performed
@@ -22,7 +11,7 @@ import random as rand
 import copy
 from Testing_MCTS import MCTS
 import SQLManipulator as sqlm
-from Minimax import get_best_move, get_best_moveABPruning, minimax, minimax_ab
+from Minimax import get_best_move, get_best_moveABPruning, get_best_moveABPruningBlue, minimax, minimax_ab
 
 #Colors
 black = (0,0,0)
@@ -482,50 +471,22 @@ def run():
         game.gameEvent()
 
         if len(options1) > 0:
+
             print('IF!!!!!!!!!!!!!!')
-            #MCTS in action
+            
+            board_state = Board_State(board)
+            best_move = get_best_moveABPruningBlue(board_state, 8)
+            board = (best_move.board)
             CanMove(board)
 
-            #By entering a specific board below, you can force the computer to choose a move at a given state
-            #Because it makes the board equal to this choice instead of returning an option
-            #[1, 'null',0,'null',0,'null',0,'null','null',0,'null',0,'null',0,'null',0,0,'null',0,'null',0,'null',0,'null','null',0,'null',-2,'null',0,'null',0,0,'null',0,'null',2,'null',0,'null','null',0,'null',0,'null',0,'null',0,0,'null',0,'null',0,'null',0,'null','null',0,'null',0,'null',0,'null',-1]
-            #Above is a boardstate that you can plug into the board_state to see a correct move.
-            board_state = Board_State(board)
-            simclock.tick()
-
-            for i in range(numrollout):
-                tree.do_rolloutBlue(board_state)
-                if i % 5 == 0: # originally 10 not 5
-                    print('# of Rollouts performed')
-                    print(i)
-                    if i % 5 == 0 and i != 0: # originally 50 not 5
-                        simclock.tick()
-                        simtime = 5 / (simclock.get_time() / 1000)
-                        print("Simulation speed: %2.2f" %(simtime), "g/s")
-            print()
-            choice, optionsNQ = tree.chooseBlue(board_state) 
-            board = (choice.board)
-
-            def avgRmethod(o):
-
-                return o[1] / o[0]
-            bestavgR = max(optionsNQ, key=avgRmethod)
-            avgRlist.append((int(bestavgR[1] / bestavgR[0] * 10000) / 10000))
-
-            nsum = 0
-            for option in optionsNQ:
-                nsum += option[0]
-            
-            CanMove(board) 
         
         if len(options2) > 0:
 
 
-            UserMove()
-            #board_state = Board_State(board)
-            #best_move = get_best_moveABPruning(board_state, 5)
-            #board = (best_move.board)
-            #CanMove(board)
+
+            
+            UserMove(game )
+            
 
         #print('ELIF!!!!!!!!!!!!!!!')
         #print('IF!!!!!!!!!!!!!!!')
@@ -549,11 +510,11 @@ def run():
 
         pclock.tick()
         totaltime += pclock.get_time() / 1000
-        print("Total visits: ", nsum, " / ", numrollout)
-        print("Number of options: ", len(optionsNQ))
-        print("Average Visits: " + "%2.2f" %(nsum/len(optionsNQ)))
-        print("Running time:" + " %2d hours, %d minutes, %2.2f seconds" %(totaltime//3600, (totaltime%3600)//60, totaltime%60))
-        print(avgRlist) # #Maps the highest reward per state
+        #print("Total visits: ", nsum, " / ", numrollout)
+        #print("Number of options: ", len(optionsNQ))
+        #print("Average Visits: " + "%2.2f" %(nsum/len(optionsNQ)))
+        #print("Running time:" + " %2d hours, %d minutes, %2.2f seconds" %(totaltime//3600, (totaltime%3600)//60, totaltime%60))
+        #print(avgRlist) # #Maps the highest reward per state
 
         game.PieceUpdate() #These two lines update the visual part
         UpdateScreen() #Removing them makes it run faster
