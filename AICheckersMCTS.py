@@ -2,7 +2,8 @@
 numrollout = 10    #Number of rollouts performed
 sqlUpdate_after_NGames = 5  #The sql speed database updates after these many games
 
-#Set up
+#Set up 
+
 import sqlite3 as sql 
 import pygame
 import random as rand
