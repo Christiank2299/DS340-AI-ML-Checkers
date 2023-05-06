@@ -471,14 +471,8 @@ def run():
 
         if len(options1) > 0:
             
-            print('IF!!!!!!!!!!!!!!')
-            #MCTS in action
+            print('IF options1')
             CanMove(board)
-
-            #By entering a specific board below, you can force the computer to choose a move at a given state
-            #Because it makes the board equal to this choice instead of returning an option
-            #[1, 'null',0,'null',0,'null',0,'null','null',0,'null',0,'null',0,'null',0,0,'null',0,'null',0,'null',0,'null','null',0,'null',-2,'null',0,'null',0,0,'null',0,'null',2,'null',0,'null','null',0,'null',0,'null',0,'null',0,0,'null',0,'null',0,'null',0,'null','null',0,'null',0,'null',0,'null',-1]
-            #Above is a boardstate that you can plug into the board_state to see a correct move.
             board_state = Board_State(board)
             simclock.tick()
 
@@ -518,8 +512,8 @@ def run():
             
             
 
-        #print('ELIF!!!!!!!!!!!!!!!')
-        #print('IF!!!!!!!!!!!!!!!')
+        #print('ELIFoptions2')
+     
         #board_state = Board_State(board)
             # this is calling the minimax.get_best_move() function 
          
@@ -547,9 +541,7 @@ def run():
         print(avgRlist) # #Maps the highest reward per state
 
         game.PieceUpdate() #These two lines update the visual part
-        UpdateScreen() #Removing them makes it run faster
-
-        #pygame.time.wait(500) #This will not work with the game checking for games longer than a second
+        UpdateScreen() #Removing them makes it run faster 
 
     pygame.quit()
     PrintStats() # prints who team wins at the end of each game 
@@ -574,6 +566,4 @@ def create_table():
     connection.close()
 
 create_table()
-run()  #It's now called in the ActiveRunner.py script    
-
-#CanMove() has to be updated after each and every move (So each next move is legit and not blind)
+run()  
