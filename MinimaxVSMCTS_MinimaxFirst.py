@@ -1,5 +1,5 @@
 #HyperParameters
-numrollout = 50    #Number of rollouts performed
+numrollout = 100    #Number of rollouts performed
 sqlUpdate_after_NGames = 2  #The sql speed database updates after these many games
 
 #Set up 
@@ -516,8 +516,7 @@ def run():
             
              
         
-            print('ELIF!!!!!!!!!!!!!!!')
-            print('IF!!!!!!!!!!!!!!!')
+            
             board_state = Board_State(board)
             # this is calling the minimax.get_best_move() function 
             best_move = get_best_moveABPruningBlue(board_state, 5)
@@ -527,7 +526,7 @@ def run():
 
         if len(options1) > 0:
             
-            print('IF!!!!!!!!!!!!!!')
+            
             #MCTS in action
             CanMove(board)
 
@@ -602,7 +601,5 @@ def create_table():
     connection.close()
 
 create_table()
-run()  #It's now called in the ActiveRunner.py script    
-
-#CanMove() has to be updated after each and every move (So each next move is legit and not blind)
+run() 
 
