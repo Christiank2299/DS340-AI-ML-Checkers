@@ -1,8 +1,3 @@
-'''
-@author Carter Koehn
-@since 11/19/2019
-Desc: This file is used to edit the MoveData.db database
-'''
 import sqlite3 as sql
 connection = sql.connect("MoveData.db")
 crsr = connection.cursor()
