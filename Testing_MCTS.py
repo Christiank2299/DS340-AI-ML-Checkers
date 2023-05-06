@@ -1,11 +1,3 @@
-"""
-A minimal implementation of Monte Carlo tree search (MCTS) in Python 3
-Luke Harold Miles, July 2019, Public Domain Dedication
-See also https://en.wikipedia.org/wiki/Monte_Carlo_tree_search
-https://gist.github.com/qpwo/c538c6f73727e254fdc7fab81024f6e1
-
-Edited by Carter Koehn October 2019 to fit into my Checkers Program
-"""
 from abc import ABC, abstractmethod
 from collections import defaultdict
 import math
@@ -13,21 +5,21 @@ import threading
 import sqlite3
 time_check = False
 
-def r0():
+def game_over_time():
     global time_check
     time_check = True
-    print("Too long of a game")
+    print("Game took too long")
     return 
 
 class MCTS:
-    "Monte Carlo tree searcher. First rollout the tree then choose a move."
+    #MCTS class preforms the rollout on the tree and then makes a move
 
     def __init__(self, exploration_weight=1):
         self.Q = defaultdict(int)  # total reward of each node
         self.N = defaultdict(int)  # total visit count for each node
         self.children = dict()  # children of each node
         self.exploration_weight = exploration_weight
-        self.timer = threading.Timer(5.0, r0)
+        #self.timer = threading.Timer(5.0, game_over_time)
         self.connection = sqlite3.connect("MoveData.db")
         self.crsr = self.connection.cursor()
 
@@ -166,7 +158,7 @@ class MCTS:
         global time_check
         "Returns the reward for a random simulation (to completion) of `node`"
         invert_reward = True
-        self.timer = threading.Timer(2.5,r0)
+        self.timer = threading.Timer(2.5, game_over_time)
         self.timer.start()
         while True:
             if node.is_terminal(node.board):
@@ -184,7 +176,7 @@ class MCTS:
         global time_check
         "Returns the reward for a random simulation (to completion) of `node`"
         invert_reward = True
-        self.timer = threading.Timer(2.5,r0)
+        self.timer = threading.Timer(2.5, game_over_time)
         self.timer.start()
         while True:
             if node.is_terminal(node.board):
