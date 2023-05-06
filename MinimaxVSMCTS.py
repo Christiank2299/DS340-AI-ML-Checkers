@@ -1,17 +1,17 @@
 
-
 #HyperParameters
-numrollout = 10    #Number of rollouts performed
-sqlUpdate_after_NGames = 5  #The sql speed database updates after these many games
+numrollout = 100    #Number of rollouts performed
+sqlUpdate_after_NGames = 2  #The sql speed database updates after these many games
 
-#Set up
+#Set up 
+
 import sqlite3 as sql 
 import pygame
 import random as rand
 import copy
 from Testing_MCTS import MCTS
 import SQLManipulator as sqlm
-from Minimax import get_best_move, get_best_moveABPruning, minimax, minimax_ab
+from Minimax import get_best_move, get_best_moveABPruning, get_best_moveABPruningBlue , minimax, minimax_ab
 
 #Colors
 black = (0,0,0)
@@ -442,6 +442,44 @@ def UserMove(game):
         
         UpdateScreen()
 
+def UserMoveBlue(game):
+    global square
+    screen = game.screen
+    size = game.size
+
+    while game.running:
+        game.gameEvent()
+        game.PieceUpdate()
+
+        mouse = pygame.mouse.get_pos()
+        mx = mouse[0] // 50
+        my = mouse[1] // 50
+
+        choices = []
+        optionlist = []
+        for option in options1:
+            if option[0] == square:
+                choice=(square + option[1] + option[1]*(abs(option[3]) % 2))
+                choices.append(choice)
+                optionlist.append(option)
+                pygame.draw.rect(screen, (200,200,200,128), ((choice%8)*size, (choice//8)*size, size, size))
+
+            click = pygame.mouse.get_pressed()
+        
+        #return t or f, if move successful t, break
+        if click[0] == 1:
+            square = (my * 8) + mx
+            if square in choices:
+                option = optionlist[choices.index(square)]
+                square = None
+                move(board,option[0],option[1],option[2],option[3])
+                return
+
+        if click[2] == 1:
+            square = None
+        
+        UpdateScreen()
+
     #if square:
         #pygame.draw.rect(screen, (200,200,200,128), ((square%8)*size, (square//8)*size, size, size))
 
@@ -468,11 +506,28 @@ def run():
     pclock.tick()
 
     while (game.running):
+
+
         game.gameEvent()
+
+
+        if len(options2) > 0:  
+             
+              
+            
+             
+        
+            
+            board_state = Board_State(board)
+            # this is calling the minimax.get_best_move() function 
+            best_move = get_best_moveABPruningBlue(board_state, 5)
+            board = (best_move.board)
+            CanMove(board)
+
 
         if len(options1) > 0:
             
-            print('IF!!!!!!!!!!!!!!')
+            
             #MCTS in action
             CanMove(board)
 
@@ -484,16 +539,16 @@ def run():
             simclock.tick()
 
             for i in range(numrollout):
-                tree.do_rolloutBlue(board_state)
-                if i % 5 == 0: # originally 10 not 5
+                tree.do_rolloutRed(board_state)
+                if i % 50  == 0: # originally 10 not 5
                     print('# of Rollouts performed')
                     print(i)
-                    if i % 5 == 0 and i != 0: # originally 50 not 5
+                    if i % 50 == 0 and i != 0: # originally 50 not 5
                         simclock.tick()
-                        simtime = 5 / (simclock.get_time() / 1000)
+                        simtime = 50 / (simclock.get_time() / 1000) # originally 50 not 5 
                         print("Simulation speed: %2.2f" %(simtime), "g/s")
             print()
-            choice, optionsNQ = tree.chooseBlue(board_state) 
+            choice, optionsNQ = tree.chooseRed(board_state) 
             board = (choice.board)
 
             def avgRmethod(o):
@@ -507,37 +562,6 @@ def run():
                 nsum += option[0]
             
             CanMove(board) 
-        
-            
-
-        
-        if len(options2) > 0:
-
-
-
-            
-            board_state = Board_State(board)
-            best_move = get_best_moveABPruning(board_state, 5)
-            board = (best_move.board)
-            CanMove(board)
-            
-
-        #print('ELIF!!!!!!!!!!!!!!!')
-        #print('IF!!!!!!!!!!!!!!!')
-        #board_state = Board_State(board)
-            # this is calling the minimax.get_best_move() function 
-         
-        #    best_move = get_best_moveABPruning(board_state, 10)
-            
-        #    board = (best_move.board)
-
-            # Assuming you have a Board_State instance called 'current_board'
-            
-
-            
-        #    CanMove(board)
-   
-            
 
         if len(options1) <= 0 or len(options2) <= 0:
             game.Restart()
@@ -578,9 +602,5 @@ def create_table():
     connection.close()
 
 create_table()
-run()  #It's now called in the ActiveRunner.py script
-
-#CanMove() has to be updated after each and every move (So each next move is legit and not blind)
-                                                      
-
+run() 
 
