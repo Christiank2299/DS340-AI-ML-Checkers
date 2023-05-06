@@ -1,7 +1,8 @@
 # Evaluation function for a given board state
 import copy 
+import time
 
-
+# original minimax that uses suboptimal logic and evaluation method from board class without pruning
 def minimax(node, depth, maximizing_player):
     if depth == 0 or node.is_terminal(node.board ):
         return node.evaluate(), node
@@ -26,7 +27,8 @@ def minimax(node, depth, maximizing_player):
                 best_move = child
         return min_eval, best_move
     
-
+# original minimax that uses suboptimal logic and evaluation method from board class with pruning later we will compare this to 
+# the better Minimax2ABPruning version with the updated evaluation method. 
 def minimax_ab(node, depth, alpha, beta, maximizing_player):
     if depth == 0 or node.is_terminal(node.board):
         return node.evaluate(), node
@@ -58,6 +60,16 @@ def minimax_ab(node, depth, alpha, beta, maximizing_player):
         return min_eval, best_move
 
 
+# Iterative deepening
+def iterative_deepening(node, time_limit):
+    transposition_table = {}
+    best_move = None
+    depth = 1
+    start_time = time.time()
+    while time.time() - start_time < time_limit:
+        _, best_move = minimax(node, depth, True, float('-inf'), float('inf'), transposition_table)
+        depth += 1
+    return best_move
 
 #def evaluate2(board_state):
 #    if -2 not in board_state.board:
@@ -71,6 +83,7 @@ def minimax_ab(node, depth, alpha, beta, maximizing_player):
 #        return 0.5
     
 def evaluate(board_state):
+    print('complex')
     # Calculate the total piece count for each player
     red_count = board_state.board.count(-1) + board_state.board.count(-2)
     blue_count = board_state.board.count(1) + board_state.board.count(2)
