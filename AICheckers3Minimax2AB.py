@@ -1,5 +1,6 @@
 
 
+
 #HyperParameters
 numrollout = 10    #Number of rollouts performed
 sqlUpdate_after_NGames = 5  #The sql speed database updates after these many games
@@ -472,24 +473,21 @@ def run():
 
         if len(options1) > 0:
 
-            print('IF!!!!!!!!!!!!!!')
+            #print('IF options1')
             
             board_state = Board_State(board)
-            best_move = get_best_moveABPruningBlue(board_state, 5)
+            best_move = get_best_moveABPruningBlue(board_state, 7)
             board = (best_move.board)
             CanMove(board)
 
         
         if len(options2) > 0:
-
-
-
-            
-            UserMove(game )
+            #CompMove(-1)
+            UserMove(game)
             
 
-        #print('ELIF!!!!!!!!!!!!!!!')
-        #print('IF!!!!!!!!!!!!!!!')
+        #print('ELIFoptions2')
+        
         #board_state = Board_State(board)
             # this is calling the minimax.get_best_move() function 
          
@@ -510,16 +508,8 @@ def run():
 
         pclock.tick()
         totaltime += pclock.get_time() / 1000
-        #print("Total visits: ", nsum, " / ", numrollout)
-        #print("Number of options: ", len(optionsNQ))
-        #print("Average Visits: " + "%2.2f" %(nsum/len(optionsNQ)))
-        #print("Running time:" + " %2d hours, %d minutes, %2.2f seconds" %(totaltime//3600, (totaltime%3600)//60, totaltime%60))
-        #print(avgRlist) # #Maps the highest reward per state
-
         game.PieceUpdate() #These two lines update the visual part
         UpdateScreen() #Removing them makes it run faster
-
-        #pygame.time.wait(500) #This will not work with the game checking for games longer than a second
 
     pygame.quit()
     PrintStats() # prints who team wins at the end of each game 
@@ -544,9 +534,7 @@ def create_table():
     connection.close()
 
 create_table()
-run()  #It's now called in the ActiveRunner.py script
-
-#CanMove() has to be updated after each and every move (So each next move is legit and not blind)
+run()  
 
 
 
